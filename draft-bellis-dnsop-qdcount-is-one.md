@@ -6,7 +6,7 @@ updates: RFC1035
 submissiontype: IETF
 ipr: trust200902
 area: Internet
-wg: DNSEXT Working Group
+wg: DNSOP Working Group
 kw: Internet-Draft
 cat: std
 
