@@ -1,0 +1,280 @@
+
+
+
+
+DNSOP Working Group                                            R. Bellis
+Internet-Draft                                                       ISC
+Updates: RFC1035 (if approved)                                  J. Abley
+Intended status: Standards Track                        16 February 2023
+Expires: 20 August 2023
+
+
+                      DNS QDCOUNT is (usually) ONE
+                  draft-bellis-dnsop-qdcount-is-one-00
+
+Abstract
+
+   This document clarifies the legal values for the QDCOUNT header value
+   in the current DNS specifications.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 20 August 2023.
+
+Copyright Notice
+
+   Copyright (c) 2023 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+
+
+
+
+
+Bellis & Abley           Expires 20 August 2023                 [Page 1]
+
+Internet-Draft        DNS QDCOUNT is (usually) ONE         February 2023
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Terminology used in this document . . . . . . . . . . . . . .   2
+   3.  QDCOUNT is (almost always) one  . . . . . . . . . . . . . . .   2
+     3.1.  Exceptions  . . . . . . . . . . . . . . . . . . . . . . .   3
+   4.  Other DNS Opcodes . . . . . . . . . . . . . . . . . . . . . .   3
+     4.1.  DNS Notify  . . . . . . . . . . . . . . . . . . . . . . .   3
+     4.2.  DNS Update  . . . . . . . . . . . . . . . . . . . . . . .   4
+     4.3.  DNS Stateful Operations . . . . . . . . . . . . . . . . .   4
+   5.  Conclusion  . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   4
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   4
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .   5
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   5
+
+1.  Introduction
+
+   An oft-repeated claim is that the DNS protocol [RFC1034][RFC1035]
+   theoreticaly permits a DNS query to contain more than one question.
+
+   While this claim might initially appear valid (the QDCOUNT field is a
+   16-bit field with a range of 0 .. 65535) in practise there are other
+   limitations inherent in the protocol that make use of a QDCOUNT
+   greater than one impractical.  In particular there are no defined
+   semantics for how to handle those response fields that might vary for
+   different QNAMEs (e.g.  AA bit, RCODE).
+
+   In this document we normatively clarify the currently legal values of
+   the QDCOUNT field, especially when applied to the Query OpCode.
+
+2.  Terminology used in this document
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+3.  QDCOUNT is (almost always) one
+
+   [RFC1035] significantly predates the use of normative requirements
+   keywords, and parts of it are therefore somewhat open to
+   interpretation.
+
+
+
+
+
+Bellis & Abley           Expires 20 August 2023                 [Page 2]
+
+Internet-Draft        DNS QDCOUNT is (usually) ONE         February 2023
+
+
+   Section 4.1.2 ("Question section format") has this to say about
+   QDCOUNT:
+
+      The section contains QDCOUNT (usually 1) entries
+
+   However, the only documented exceptions within [RFC1035] relate to
+   the IQuery Opcode, where the request has "an empty question section"
+   (QDCOUNT == 0), and "zero, one, or multiple domain names for the
+   specified resource as QNAMEs in the question section".
+
+   The IQuery OpCode was formally obsoleted in [RFC3425].
+
+   In the absence of clearly expressed normative requirements, we rely
+   on other text in [RFC1035] that makes use of the definite article or
+   other text that implies a singuar question, and therefore QDCOUNT ==
+   1.
+
+   For example, Section 4.1:
+
+      the question for the name server
+
+   and:
+
+      The question section contains fields that describe a question to a
+      name server
+
+   and in Section 4.1.1.  ("Header section format"):
+
+      AA Authoritative Answer - this bit is valid in responses, and
+      specifies that the responding name server is an authority for the
+      domain name in question section.
+
+3.1.  Exceptions
+
+   There is one exception to QDCOUNT == 1.
+
+   DNS Cookies [RFC7873] in Section 5.4 allow a client to receive a
+   valid Server Cookie without sending a specific question by sending a
+   Query packet (OpCode 0) with QDCOUNT == 0, with the resulting
+   response also containing no question.
+
+4.  Other DNS Opcodes
+
+4.1.  DNS Notify
+
+   DNS Notify [RFC1996] also lacks a clearly defined range of values for
+   QDCOUNT.  Section 3.7 says:
+
+
+
+
+Bellis & Abley           Expires 20 August 2023                 [Page 3]
+
+Internet-Draft        DNS QDCOUNT is (usually) ONE         February 2023
+
+
+      A NOTIFY request has QDCOUNT > 0
+
+   but all other text in the RFC talks about the <QNAME, QCLASS, QTYPE>
+   tuple in the singular.
+
+4.2.  DNS Update
+
+   DNS Update [RFC2136] renames the QDCOUNT field to ZOCOUNT, but the
+   value is constrained to be one by Section 2.3 ("Zone Section"):
+
+      All records to be updated must be in the same zone, and therefore
+      the Zone Section is allowed to contain exactly one record.
+
+4.3.  DNS Stateful Operations
+
+   DNS Stateful Operations [RFC8490] (DSO - OpCode 6) attempts to
+   preserve compatibility with the standard DNS 12 octet header, and
+   does so by requiring that all four of the section count values be set
+   to zero.
+
+5.  Conclusion
+
+   The only legal values of the 16-bit word contained in octets 4 and 5
+   of the DNS header (usually called QDCOUNT) are zero (rarely) and one,
+   otherwise.
+
+   Future OpCodes may define other uses and legal values for the header
+   octets used by this field.
+
+6.  Security Considerations
+
+   This document has no security implications.
+
+7.  IANA Considerations
+
+   This document has no IANA considerations.
+
+8.  References
+
+8.1.  Normative References
+
+   [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
+              STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
+              <https://www.rfc-editor.org/info/rfc1034>.
+
+   [RFC1035]  Mockapetris, P., "Domain names - implementation and
+              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
+              November 1987, <https://www.rfc-editor.org/info/rfc1035>.
+
+
+
+Bellis & Abley           Expires 20 August 2023                 [Page 4]
+
+Internet-Draft        DNS QDCOUNT is (usually) ONE         February 2023
+
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC3425]  Lawrence, D., "Obsoleting IQUERY", RFC 3425,
+              DOI 10.17487/RFC3425, November 2002,
+              <https://www.rfc-editor.org/info/rfc3425>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+8.2.  Informative References
+
+   [RFC1996]  Vixie, P., "A Mechanism for Prompt Notification of Zone
+              Changes (DNS NOTIFY)", RFC 1996, DOI 10.17487/RFC1996,
+              August 1996, <https://www.rfc-editor.org/info/rfc1996>.
+
+   [RFC2136]  Vixie, P., Ed., Thomson, S., Rekhter, Y., and J. Bound,
+              "Dynamic Updates in the Domain Name System (DNS UPDATE)",
+              RFC 2136, DOI 10.17487/RFC2136, April 1997,
+              <https://www.rfc-editor.org/info/rfc2136>.
+
+   [RFC7873]  Eastlake 3rd, D. and M. Andrews, "Domain Name System (DNS)
+              Cookies", RFC 7873, DOI 10.17487/RFC7873, May 2016,
+              <https://www.rfc-editor.org/info/rfc7873>.
+
+   [RFC8490]  Bellis, R., Cheshire, S., Dickinson, J., Dickinson, S.,
+              Lemon, T., and T. Pusateri, "DNS Stateful Operations",
+              RFC 8490, DOI 10.17487/RFC8490, March 2019,
+              <https://www.rfc-editor.org/info/rfc8490>.
+
+Authors' Addresses
+
+   Ray Bellis
+   Internet Systems Consortium, Inc.
+   PO Box 360
+   Newmarket,  NH 03857
+   United States of America
+   Phone: +1 650 423 1300
+   Email: ray@isc.org
+
+
+   Joe Abley
+   Email: jabley@hopcount.ca
+
+
+
+
+
+Bellis & Abley           Expires 20 August 2023                 [Page 5]

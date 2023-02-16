@@ -102,7 +102,7 @@ and in Section 4.1.1. ("Header section format"):
 
 There is one exception to QDCOUNT == 1.
 
-DNS Cookies {{!RFC7873}} in Section 5.4 allow a client to receive a
+DNS Cookies {{?RFC7873}} in Section 5.4 allow a client to receive a
 valid Server Cookie without sending a specific question by sending a
 Query packet (OpCode 0) with QDCOUNT == 0, with the resulting response
 also containing no question.
@@ -111,7 +111,7 @@ also containing no question.
 
 ## DNS Notify
 
-DNS Notify {{!RFC1996}} also lacks a clearly defined range of values
+DNS Notify {{?RFC1996}} also lacks a clearly defined range of values
 for QDCOUNT.  Section 3.7 says:
 
 > A NOTIFY request has QDCOUNT > 0
@@ -121,7 +121,7 @@ tuple in the singular.
 
 ## DNS Update
 
-DNS Update {{!RFC2136}} renames the QDCOUNT field to ZOCOUNT, but the
+DNS Update {{?RFC2136}} renames the QDCOUNT field to ZOCOUNT, but the
 value is constrained to be one by Section 2.3 ("Zone Section"):
 
 > All records to be updated must be in the same zone, and therefore the
@@ -129,7 +129,7 @@ value is constrained to be one by Section 2.3 ("Zone Section"):
 
 ## DNS Stateful Operations
 
-DNS Stateful Operations {{!RFC8490}} (DSO - OpCode 6) attempts to
+DNS Stateful Operations {{?RFC8490}} (DSO - OpCode 6) attempts to
 preserve compatibility with the standard DNS 12 octet header, and does
 so by requiring that all four of the section count values be set to
 zero.
