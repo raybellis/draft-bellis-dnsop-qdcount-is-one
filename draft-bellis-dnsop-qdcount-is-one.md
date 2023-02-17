@@ -1,6 +1,6 @@
 ---
 title: In the DNS, QDCOUNT is (usually) One
-docname: draft-bellis-dnsop-qdcount-is-one-00
+docname: draft-bellis-dnsop-qdcount-is-one-01
 updates: RFC1035
 
 submissiontype: IETF
