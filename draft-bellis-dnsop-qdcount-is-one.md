@@ -173,14 +173,13 @@ parameter whose value is greater than 1. It follows that the Question
 Section of a DNS message with OPCODE = 0 MUST NOT contain more than
 one question.
 
-A DNS message with OPCODE = 0 (QUERY) and QDCOUNT > 1 MUST be treated
-as an incorrectly-formatted message. If a response is generated for
-a query that includes more than one question, the value of the RCODE
-parameter in the response message MUST be set to 1 (FORMERR).
+A DNS message with OPCODE = 0 (QUERY) and QDCOUNT > 1 MUST be treated as
+an incorrectly-formatted message.  The value of the RCODE parameter in
+the response message MUST be set to 1 (FORMERR).
 
 Firewalls that process DNS messages in order to eliminate unwanted
-traffic MAY treat messages with OPCODE = 0 and QDCOUNT > 1 as
-unwanted traffic.
+traffic MAY treat messages with OPCODE = 0 and QDCOUNT > 1 as malformed
+traffic and generate the required FORMERR response.
 
 # Security Considerations
 
