@@ -238,8 +238,8 @@ Internet-Draft    In the DNS, QDCOUNT is (usually) One     February 2023
    parameter in the response message MUST be set to 1 (FORMERR).
 
    Firewalls that process DNS messages in order to eliminate unwanted
-   traffic MAY treat messages with OPCODE = 0 and QDCOUNT > 1 as
-   malformed traffic and generate the required FORMERR response.
+   traffic SHOULD treat messages with OPCODE = 0 and QDCOUNT > 1 as
+   malformed traffic.  See Section 4 of [RFC8906] for further guidance.
 
 5.  Security Considerations
 
@@ -306,6 +306,11 @@ Internet-Draft    In the DNS, QDCOUNT is (usually) One     February 2023
               RFC 8490, DOI 10.17487/RFC8490, March 2019,
               <https://www.rfc-editor.org/info/rfc8490>.
 
+   [RFC8906]  Andrews, M. and R. Bellis, "A Common Operational Problem
+              in DNS Servers: Failure to Communicate", BCP 231,
+              RFC 8906, DOI 10.17487/RFC8906, September 2020,
+              <https://www.rfc-editor.org/info/rfc8906>.
+
 Authors' Addresses
 
    Ray Bellis
@@ -323,11 +328,6 @@ Authors' Addresses
    Netherlands
    Phone: +31 6 45 56 36 34
    Email: jabley@cloudflare.com
-
-
-
-
-
 
 
 

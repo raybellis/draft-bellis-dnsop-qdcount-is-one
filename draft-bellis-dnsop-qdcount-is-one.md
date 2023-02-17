@@ -178,8 +178,8 @@ an incorrectly-formatted message.  The value of the RCODE parameter in
 the response message MUST be set to 1 (FORMERR).
 
 Firewalls that process DNS messages in order to eliminate unwanted
-traffic MAY treat messages with OPCODE = 0 and QDCOUNT > 1 as malformed
-traffic and generate the required FORMERR response.
+traffic SHOULD treat messages with OPCODE = 0 and QDCOUNT > 1 as
+malformed traffic.  See Section 4 of {{?RFC8906}} for further guidance.
 
 # Security Considerations
 
