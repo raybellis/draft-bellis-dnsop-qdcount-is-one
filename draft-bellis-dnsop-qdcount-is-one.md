@@ -47,7 +47,7 @@ behaviour when values that are not allowed are encountered.
 
 # Introduction
 
-The DNS protocol {{!RFC1034}{{!RFC1035}} includes a parameter QDCOUNT
+The DNS protocol {{!RFC1034}}{{!RFC1035}} includes a parameter QDCOUNT
 in the DNS message header, whose value is specified to mean the
 number of questions in the Question Section of a message.
 
