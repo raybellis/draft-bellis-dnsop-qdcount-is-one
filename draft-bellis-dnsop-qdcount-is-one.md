@@ -94,7 +94,7 @@ QDCOUNT:
 
 The only documented exceptions within {{!RFC1035}} relate to the
 IQuery Opcode, where the request has "an empty question section"
-(QDCOUNT == 0), and "zero, one, or multiple domain names for the
+(QDCOUNT = 0), and "zero, one, or multiple domain names for the
 specified resource as QNAMEs in the question section". The IQuery
 OpCode was made obsolete in {{!RFC3425}}.
 
@@ -120,7 +120,7 @@ and in Section 4.1.1. ("Header section format"):
 
 DNS Cookies {{?RFC7873}} in Section 5.4 allow a client to receive
 a valid Server Cookie without sending a specific question by sending
-a Query packet (OpCode 0) with QDCOUNT == 0, with the resulting
+a Query packet (OpCode 0) with QDCOUNT = 0, with the resulting
 response also containing no question.
 
 ## OPCODE = 4 (NOTIFY)
