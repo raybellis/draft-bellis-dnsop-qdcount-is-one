@@ -1,5 +1,5 @@
 ---
-title: DNS QDCOUNT is (usually) ONE
+title: In the DNS, QDCOUNT is (usually) One
 docname: draft-bellis-dnsop-qdcount-is-one-00
 updates: RFC1035
 
@@ -25,35 +25,45 @@ author:
     street: PO Box 360
     city: Newmarket
     code: NH 03857
-    country: USA
+    country: US
     phone: +1 650 423 1300
     email: ray@isc.org
   -
     ins: J. Abley
     name: Joe Abley
-    email: jabley@hopcount.ca
+    org: Cloudflare
+    city: Amsterdam
+    country: NL
+    phone: +31 6 45 56 36 34
+    email: jabley@cloudflare.com
 
 --- abstract
 
-This document clarifies the legal values for the QDCOUNT header
-value in the current DNS specifications.
+This document clarifies the allowable values of the QDCOUNT parameter
+in DNS messages with OPCODE = 0 (QUERY) and specifies the required
+behaviour when values that are not allowed are encountered.
 
 --- middle
 
 # Introduction
 
-An oft-repeated claim is that the DNS protocol {{!RFC1034}}{{!RFC1035}}
-theoreticaly permits a DNS query to contain more than one question.
+The DNS protocol {{!RFC1034}{{!RFC1035}} includes a parameter QDCOUNT in the
+DNS message header, whose value is specified to mean the number
+of questions in the Question Section of a message.
 
-While this claim might initially appear valid (the QDCOUNT field is a
-16-bit field with a range of 0 .. 65535) in practise there are other
-limitations inherent in the protocol that make use of a QDCOUNT greater
-than one impractical.  In particular there are no defined semantics for
-how to handle those response fields that might vary for different QNAMEs
-(e.g. AA bit, RCODE).
+In a general
+sense it seems perfectly plausible for the QDCOUNT parameter, an unsigned
+16-bit value, to take a considerable range of values. However, in the
+specific case of messages that encode DNS queries (messages with OPCODE
+= 0) there are other limitations inherent in the protocol that constrain
+values of QDCOUNT to be either 0 or 1. In particular, several parameters
+specified for DNS response messages such as AA and RCODE have no defined
+meaning when the message contains multiple queries, since there is no way
+to signal which question those parameters relate to.
 
-In this document we normatively clarify the currently legal values of
-the QDCOUNT field, especially when applied to the Query OpCode.
+In this document we clarify the allowable values of the QDCODE parameter
+in DNS messages with OPCODE = 0 (QUERY). We also briefly survey the use
+of this parameter by other types of DNS messages with OPCODE = 
 
 # Terminology used in this document
 
@@ -63,10 +73,10 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 {{!RFC2119}} {{!RFC8174}} when, and only when, they appear in all
 capitals, as shown here.
 
-# QDCOUNT is (almost always) one
+# QDCOUNT in Queries is (almost always) one
 
 {{!RFC1035}} significantly predates the use of normative requirements
-keywords, and parts of it are therefore somewhat open to interpretation.
+keywords, and parts of it are consequently somewhat open to interpretation.
 
 Section 4.1.2 ("Question section format") has this to say about QDCOUNT:
 
@@ -75,9 +85,8 @@ Section 4.1.2 ("Question section format") has this to say about QDCOUNT:
 However, the only documented exceptions within {{!RFC1035}} relate to
 the IQuery Opcode, where the request has "an empty question section"
 (QDCOUNT == 0), and "zero, one, or multiple domain names for the
-specified resource as QNAMEs in the question section".
-
-The IQuery OpCode was formally obsoleted in {{!RFC3425}}.
+specified resource as QNAMEs in the question section". The IQuery OpCode
+was made obsolete in {{!RFC3425}}.
 
 In the absence of clearly expressed normative requirements, we rely on
 other text in {{!RFC1035}} that makes use of the definite article or
@@ -99,8 +108,6 @@ and in Section 4.1.1. ("Header section format"):
 >    authority for the domain name in question section.
 
 ## Exceptions
-
-There is one exception to QDCOUNT == 1.
 
 DNS Cookies {{?RFC7873}} in Section 5.4 allow a client to receive a
 valid Server Cookie without sending a specific question by sending a
@@ -149,6 +156,6 @@ This document has no security implications.
 
 # IANA Considerations
 
-This document has no IANA considerations.
+This document has no IANA actions.
 
 --- back
