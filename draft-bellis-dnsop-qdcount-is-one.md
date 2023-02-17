@@ -150,7 +150,7 @@ set to zero.
 
 ## Conclusion
 
-There is no description in {{!RFC1035}} that describes how other
+There is no text in {{!RFC1035}} that describes how other
 parameters in the DNS message such as AA, RCODE should be interpreted
 in the case where a message includes more than one question. An
 originator of a query with QDCOUNT > 1 can have no expectations of
